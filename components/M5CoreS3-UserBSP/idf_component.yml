@@ -1,0 +1,8 @@
+description: M5CoreS3 User BSP
+
+targets:
+  - esp32s3
+  
+dependencies:
+  cfscn/sensorlib          : "0.2.2"
+  espressif/m5stack_core_s3: "2.0.0"
