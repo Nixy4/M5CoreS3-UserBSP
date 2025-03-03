@@ -27,9 +27,9 @@ esp_err_t M5CoreS3::i2cInit()
     ESP_LOGE(TAG, "I2C init failed with error 0x%x", err);
     return err;
   }
-  _i2cMasterBusHandle = bsp_i2c_get_bus_handle();
-  _i2cDevHandleAXP2101 = bsp_i2c_get_axp2101_handle();
-  _i2cDevHandleAW9523 = bsp_i2c_get_aw9523_handle();
+  _i2cMasterBusHandle  = bsp_i2c_get_bus_handle();
+  _i2cDevHandleAXP2101 = bsp_i2c_get_dev_handle_axp2101();
+  _i2cDevHandleAW9523  = bsp_i2c_get_dev_handle_aw9523();
   assert(_i2cMasterBusHandle != NULL);
   assert(_i2cDevHandleAXP2101 != NULL);
   assert(_i2cDevHandleAW9523 != NULL);
