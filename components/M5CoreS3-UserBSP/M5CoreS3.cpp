@@ -149,8 +149,6 @@ void M5CoreS3::alSensorDeinit()
 
 void M5CoreS3::alSensorStart() 
 {
-  const char* TAG = "SensorLTR553";
-
   _alSensor.setLightSensorThreshold(10, 200);
   _alSensor.setProximityThreshold(10, 30);
   _alSensor.setLightSensorPersists(5);
@@ -160,9 +158,7 @@ void M5CoreS3::alSensorStart()
   _alSensor.setLightSensorGain(SensorLTR553::ALS_GAIN_8X);
   _alSensor.setPsLedPulsePeriod(SensorLTR553::PS_LED_PLUSE_100KHZ);
   _alSensor.setPsLedDutyCycle(SensorLTR553::PS_LED_DUTY_100);
-  ESP_LOGI(TAG, "PS LED duty cycle set");
   _alSensor.setPsLedCurrent(SensorLTR553::PS_LED_CUR_50MA);
-  ESP_LOGI(TAG, "PS LED current set");
   _alSensor.setProximityRate(SensorLTR553::PS_MEAS_RATE_200MS);
   _alSensor.setPsLedPulses(1);
   _alSensor.enablePsIndicator();
