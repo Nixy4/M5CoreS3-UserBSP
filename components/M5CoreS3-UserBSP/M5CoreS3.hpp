@@ -9,8 +9,8 @@ class M5CoreS3
 {
 private:
 	const char* TAG = "M5CoreS3";
-	M5CoreS3() { }
-	~M5CoreS3() { }
+	M5CoreS3() {}
+	~M5CoreS3() {}
 public:
 	static M5CoreS3& getInstance() 
 	{

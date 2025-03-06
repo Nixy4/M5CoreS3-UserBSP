@@ -1,11 +1,13 @@
 set(src_dirs        
   "./"
-  # "./apps/launcher/"
+  "./apps/launcher/"
+  "./apps/faceRecognize/"
   )
 
 set(include_dirs    
   "./"
-  # "./apps/launcher/"
+  "./apps/launcher/"
+  "./apps/faceRecognize/"
   )
 
 set(requires        
