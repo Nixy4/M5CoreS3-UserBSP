@@ -1,11 +1,11 @@
 set(src_dirs        
   "./"
-  "./apps/launcher/"
+  # "./apps/launcher/"
   )
 
 set(include_dirs    
   "./"
-  "./apps/launcher/"
+  # "./apps/launcher/"
   )
 
 set(requires        
