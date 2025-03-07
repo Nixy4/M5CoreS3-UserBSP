@@ -1,11 +1,15 @@
 #include "faceRecognition.hpp"
 
+static const char* TAG = "FaceRecognition";
 static M5CoreS3& core = M5CoreS3::getInstance();
 static Mooncake& cake = GetMooncake();
 
-FaceRecognition::FaceRecognition() : _recognizer(&_feat, "/spiffs/face.db" , dl::recognition::DB_SPIFFS)
+FaceRecognition::FaceRecognition() :
+  detector1(0.3F,0.3F,10,0.3F), detector2(0.4F,0.3F,10), recognizer()
 {
   ESP_LOGI(TAG, "FaceRecognition()");
+	recognizer.set_partition(ESP_PARTITION_TYPE_DATA, ESP_PARTITION_SUBTYPE_ANY, "face");
+	recognizer.set_ids_from_flash();
 }
 
 FaceRecognition::~FaceRecognition()
@@ -23,6 +27,7 @@ void FaceRecognition::onCreate()
   _img_dsc_lv.header.flags = 0;
   _img_dsc_lv.data = (uint8_t*)heap_caps_malloc(320*240*2, MALLOC_CAP_SPIRAM| MALLOC_CAP_8BIT);
   assert(_img_dsc_lv.data);
+  _img_lv = lv_img_create(lv_scr_act());
   core.displayUnlock();//!
 }
 
@@ -37,22 +42,9 @@ void FaceRecognition::onRunning()
 {
   ESP_LOGI(TAG, "onRunning");
   camera_fb_t* fb = core.cameraFrameGet();//!
-  if(fb!=NULL) {
-    const dl::image::img_t &img = {
-      .data = fb->buf,
-      .width = static_cast<int>(fb->width),
-      .height = static_cast<int>(fb->height),
-      .pix_type = dl::image::DL_IMAGE_PIX_TYPE_RGB565
-    };
-    std::list<dl::detect::result_t> &detect_res = _detector.run(img);
-    if( detect_res.size() ) {
-      dl::image::draw_hollow_rectangle (img, 
-      detect_res.front().box[0], 
-      detect_res.front().box[1],
-      detect_res.front().box[2],
-      detect_res.front().box[3],
-      {255,0,0}, 2);
-    };
+  if(fb == NULL) {
+    ESP_LOGE(TAG, "Camera capture failed");
+    return;
   }
   core.displayLock(0);//!
   _img_dsc_lv.header.w = fb->width;

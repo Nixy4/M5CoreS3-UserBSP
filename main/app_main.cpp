@@ -30,8 +30,8 @@ extern "C" void app_main(void)
 	core.i2cInit();
 	core.displayInit();
 	core.displayBrightnessOn();
-	core.spiffsMount();
-	list_dir("/spiffs");
+	// core.spiffsMount();
+	// list_dir("/spiffs");
 	
 	//*Middleware
 	xTaskCreatePinnedToCore([](void* arg) 

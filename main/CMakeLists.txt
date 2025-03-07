@@ -13,6 +13,8 @@ set(include_dirs
 set(requires        
   mooncake
   M5CoreS3-UserBSP
+  esp-dl
+  esp-who
   )
 
 idf_component_register(

@@ -3,5 +3,5 @@ targets:
 
 dependencies:
   espressif/mdns                  : "1.7.0"
-  espressif/human_face_recognition: "0.2.0"
+  # espressif/human_face_recognition: "0.2.0"
   
