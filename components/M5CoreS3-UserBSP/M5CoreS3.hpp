@@ -1,5 +1,6 @@
 #pragma once
 
+#include "dirent.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_log.h"
@@ -11,7 +12,7 @@
 class M5CoreS3
 {
 private:
-	const char* TAG = "M5CoreS3";
+
 	M5CoreS3() {}
 	~M5CoreS3() {}
 public:
@@ -70,7 +71,10 @@ public:
 	void alSensorStart();
 	int alSensorGetLight(int channel);
 	int alSensorGetProximity(bool* saturated);
-
-	/*Utils*/
-	lv_obj_t* lv_scr_create_base();
 };
+
+/*Utils*/
+
+void esp_free_heap_print();
+lv_obj_t* lv_scr_create_base();
+void uint16_swap(uint16_t* buf, size_t w, size_t h);

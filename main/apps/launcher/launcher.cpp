@@ -59,7 +59,7 @@ void Launcher::appDelete(int id)
 void Launcher::update()
 {
   core.displayLock(0);//!
-  lv_obj_t* scr = core.lv_scr_create_base();
+  lv_obj_t* scr = lv_scr_create_base();
   lv_obj_set_style_base_dir(scr, LV_BASE_DIR_NEUTRAL, 0);
   lv_obj_set_size(scr, LV_HOR_RES, LV_VER_RES);
   lv_obj_set_flex_flow(scr, LV_FLEX_FLOW_ROW_WRAP);

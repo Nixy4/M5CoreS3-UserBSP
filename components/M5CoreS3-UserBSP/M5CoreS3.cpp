@@ -1,5 +1,7 @@
 #include "M5CoreS3.hpp"
 
+static const char* TAG = "M5CoreS3";
+
 esp_err_t M5CoreS3::audioInit(const i2s_std_config_t* i2s_config) 
 { 
   return bsp_audio_init(i2s_config); 
@@ -176,7 +178,14 @@ int M5CoreS3::alSensorGetProximity(bool* saturated)
   return _alSensor.getProximity(saturated); 
 }
 
-lv_obj_t* M5CoreS3::lv_scr_create_base()
+void esp_free_heap_print()
+{
+	ESP_LOGE("HEAP", "Free Heap: %d--%d--%d--%d", 
+		heap_caps_get_free_size(MALLOC_CAP_INTERNAL), heap_caps_get_minimum_free_size(MALLOC_CAP_INTERNAL),
+		heap_caps_get_free_size(MALLOC_CAP_SPIRAM), heap_caps_get_minimum_free_size(MALLOC_CAP_SPIRAM));
+}
+
+lv_obj_t* lv_scr_create_base()
 {
   lv_obj_t* scr = lv_obj_create(NULL);
   lv_obj_set_size(scr, LV_HOR_RES, LV_VER_RES);
@@ -186,3 +195,24 @@ lv_obj_t* M5CoreS3::lv_scr_create_base()
   lv_obj_set_style_pad_right(scr, 10, 0);
   return scr;
 }
+
+void uint16_swap(uint16_t* buf, size_t w, size_t h)
+{
+	for (size_t i = 0; i < w * h; i++) {
+		buf[i] = (buf[i] >> 8) | (buf[i] << 8);
+	}
+}
+
+void list_dir(const char *path) {
+	DIR *dir = opendir(path);
+	if (dir == NULL) {
+			ESP_LOGE(TAG, "Failed to open directory: %s", path);
+			return;
+	}
+	struct dirent *entry;
+	while ((entry = readdir(dir)) != NULL) {
+			ESP_LOGI(TAG, "Found %s", entry->d_name);
+	}
+	closedir(dir);
+}
+
