@@ -1,9 +1,12 @@
 #pragma once
 
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 #include "esp_log.h"
 #include "esp_camera.h"
 #include "bsp/esp-bsp.h"
 #include "SensorLTR553.hpp"
+#include "lvgl.h"
 
 class M5CoreS3
 {
@@ -67,4 +70,7 @@ public:
 	void alSensorStart();
 	int alSensorGetLight(int channel);
 	int alSensorGetProximity(bool* saturated);
+
+	/*Utils*/
+	lv_obj_t* lv_scr_create_base();
 };

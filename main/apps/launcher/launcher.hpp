@@ -1,27 +1,27 @@
 #pragma once
 
-//*Device
 #include "M5CoreS3.hpp"
-//*Middleware
 #include "mooncake.h"
-#include "lvgl.h"
 
+using namespace std;
 using namespace mooncake;
 
 class Launcher : public BasicAbility
 {
 private:
-    const char* TAG = "Launcher";
-    // lv_obj_t* scr;
-    // TaskHandle_t taskHandle;
-    // void onBoot();
-    // void task(void* arg);
+    struct app
+    {
+        string name;
+        int id;
+    };
+    vector<app> apps;
 
 public:
     void onCreate() override;
     void onDestroy() override;
     void onRunning() override;
-    // void onOpen() override;
-    // void onClose() override;
-    // void onSleeping() override;
+
+    void appAdd(string name, int id);
+    void appDelete(int id);
+    void update();
 };

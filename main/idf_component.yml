@@ -2,8 +2,6 @@ targets:
   - esp32s3
 
 dependencies:
-  cfscn/sensorlib          : "0.2.2"
-  espressif/m5stack_core_s3: "2.0.0"
-  espressif/mdns           : "1.7.0"
-  espressif/esp-dl         : "3.1.0"
+  espressif/mdns                  : "1.7.0"
+  espressif/human_face_recognition: "0.2.0"
   

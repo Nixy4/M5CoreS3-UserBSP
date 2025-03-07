@@ -1,26 +1,8 @@
-//* std
-#include <stdio.h>
-#include <string.h>
-#include <stdbool.h>
-#include <iostream>
-#include <thread>
-#include <chrono>
-//*SoC
-#include "sdkconfig.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "freertos/semphr.h"
-#include "esp_log.h"
-//*Peripherals
-
-//*Device
+#include "dirent.h"
 #include "M5CoreS3.hpp"
-
-//*Middleware
-#include "lvgl.h"
 #include "mooncake.h"
-//*APP
 #include "launcher.hpp"
+#include "faceRecognition.hpp"
 
 using namespace std;
 using namespace mooncake;
@@ -29,26 +11,46 @@ static const char* TAG = "MAIN";
 static M5CoreS3& core = M5CoreS3::getInstance();
 static Mooncake& cake = GetMooncake();
 
+void list_dir(const char *path) {
+    DIR *dir = opendir(path);
+    if (dir == NULL) {
+        ESP_LOGE(TAG, "Failed to open directory: %s", path);
+        return;
+    }
+    struct dirent *entry;
+    while ((entry = readdir(dir)) != NULL) {
+        ESP_LOGI(TAG, "Found %s", entry->d_name);
+    }
+    closedir(dir);
+}
+
 extern "C" void app_main(void)
 {
 	//*Device
 	core.i2cInit();
 	core.displayInit();
-	core.displayBrightnessOn();	
-
+	core.displayBrightnessOn();
+	core.spiffsMount();
+	list_dir("/spiffs");
+	
 	//*Middleware
 	xTaskCreatePinnedToCore([](void* arg) 
 	{
-		const char* TAG = "Mooncake";
+		int id;
+		id = cake.createExtension(make_unique<Launcher>());
+		Launcher* launcher = cake.getExtensionInstance<Launcher>(id);
+		ESP_LOGI(TAG, "Launcher ID: %d", id);
 
-		cake.createExtension(make_unique<Launcher>());
-		
+		id = cake.createExtension(make_unique<FaceRecognition>());
+		launcher->appAdd("FaceRecognition", id);
+		launcher->update();
+
 		while(1)
 		{
 			cake.update();
 			vTaskDelay(1);
 		}
 
-	}, "Mooncake", 1024*4, NULL, 5, NULL, APP_CPU_NUM);
+	}, TAG , 1024*4, NULL, 5, NULL, APP_CPU_NUM);
 
 }

@@ -175,3 +175,14 @@ int M5CoreS3::alSensorGetProximity(bool* saturated)
 { 
   return _alSensor.getProximity(saturated); 
 }
+
+lv_obj_t* M5CoreS3::lv_scr_create_base()
+{
+  lv_obj_t* scr = lv_obj_create(NULL);
+  lv_obj_set_size(scr, LV_HOR_RES, LV_VER_RES);
+  lv_obj_set_style_pad_top(scr, 10, 0);
+  lv_obj_set_style_pad_bottom(scr, 10, 0);
+  lv_obj_set_style_pad_left(scr, 10, 0);
+  lv_obj_set_style_pad_right(scr, 10, 0);
+  return scr;
+}
