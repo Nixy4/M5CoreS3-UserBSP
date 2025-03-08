@@ -95,11 +95,58 @@ void M5CoreS3::displayRotate(lv_disp_t* disp, lv_display_rotation_t rotation)
 
 lv_disp_t* M5CoreS3::displayInit() 
 { 
-  _display = bsp_display_start();
-  if (_display == NULL) {
-    ESP_LOGE(TAG, "Display init failed");
-  }
-  return _display;
+  bsp_display_cfg_t cfg = {
+    .lvgl_port_cfg = {
+      .task_priority     = 4,
+      .task_stack        = 7168,
+      .task_affinity     = APP_CPU_NUM,
+      .task_max_sleep_ms = 500,
+      .timer_period_ms   = 5,
+    },
+    .buffer_size   = 320*240,
+    .double_buffer = 0,
+    .flags         = {
+      .buff_dma    = true,
+      .buff_spiram = false,
+    }    
+  };
+  ESP_ERROR_CHECK(lvgl_port_init(&cfg.lvgl_port_cfg));
+  ESP_ERROR_CHECK(bsp_display_brightness_init());
+
+  esp_lcd_panel_io_handle_t io_handle = NULL;
+  esp_lcd_panel_handle_t panel_handle = NULL;
+  const bsp_display_config_t bsp_disp_cfg = {
+      .max_transfer_sz = BSP_LCD_DRAW_BUFF_SIZE * sizeof(uint16_t),
+  };
+  ESP_ERROR_CHECK(bsp_display_new(&bsp_disp_cfg, &panel_handle, &io_handle));
+
+  esp_lcd_panel_disp_on_off(panel_handle, true);
+
+  /* Add LCD screen */
+  ESP_LOGD(TAG, "Add LCD screen");
+  const lvgl_port_display_cfg_t disp_cfg = {
+    .io_handle     = io_handle,
+    .panel_handle  = panel_handle,
+    .buffer_size   = cfg.buffer_size,
+    .double_buffer = cfg.double_buffer,
+    .hres          = BSP_LCD_H_RES,
+    .vres          = BSP_LCD_V_RES,
+    .monochrome    = false,
+      /* Rotation values must be same as used in esp_lcd for initial settings of the screen */
+    .rotation = {
+      .swap_xy  = false,
+      .mirror_x = false,
+      .mirror_y = false,
+    },
+    .flags = {
+    .buff_dma            = cfg.flags.buff_dma,
+    .buff_spiram         = cfg.flags.buff_spiram,
+#if LVGL_VERSION_MAJOR >= 9
+    .swap_bytes          = (BSP_LCD_BIGENDIAN ? true : false),
+#endif
+    }
+  };
+  return lvgl_port_add_disp(&disp_cfg);
 }
 
 esp_err_t M5CoreS3::cameraInit() 
@@ -178,9 +225,9 @@ int M5CoreS3::alSensorGetProximity(bool* saturated)
   return _alSensor.getProximity(saturated); 
 }
 
-void esp_free_heap_print()
+void esp_free_heap_print(const char* TAG)
 {
-	ESP_LOGE("HEAP", "Free Heap: %d--%d--%d--%d", 
+	ESP_LOGE(TAG, "Free Heap: IRAM [%d:%d] SPIRAM [%d:%d]", 
 		heap_caps_get_free_size(MALLOC_CAP_INTERNAL), heap_caps_get_minimum_free_size(MALLOC_CAP_INTERNAL),
 		heap_caps_get_free_size(MALLOC_CAP_SPIRAM), heap_caps_get_minimum_free_size(MALLOC_CAP_SPIRAM));
 }

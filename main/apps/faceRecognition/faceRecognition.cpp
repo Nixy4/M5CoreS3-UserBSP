@@ -7,13 +7,11 @@ FaceRecognition::FaceRecognition() :
   _recognizer(&_feat, "/spiffs/face.db" , dl::recognition::DB_SPIFFS)
 {
   ESP_LOGI(TAG, "FaceRecognition()");
-  esp_free_heap_print();
 }
 
 FaceRecognition::~FaceRecognition()
 {
   ESP_LOGI(TAG, "~FaceRecognition()");
-  esp_free_heap_print();
 }
 
 void FaceRecognition::onCreate()

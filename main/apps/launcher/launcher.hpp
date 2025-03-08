@@ -6,22 +6,22 @@
 using namespace std;
 using namespace mooncake;
 
-class Launcher : public BasicAbility
+class Launcher : public UIAbility
 {
 private:
-    struct app
-    {
-        string name;
-        int id;
-    };
-    vector<app> apps;
-
+  lv_obj_t* _scr;
 public:
-    void onCreate() override;
-    void onDestroy() override;
-    void onRunning() override;
-
-    void appAdd(string name, int id);
-    void appDelete(int id);
-    void update();
+  Launcher();
+  ~Launcher();
+  void onCreate() override;
+  void onDestroy() override;
+  void onForeground() override;
+  void onHide() override;
+  void onBackground() override;
+  void onShow() override;
+  void appButtonCreate(int appId);
+  int appRegister(unique_ptr<AppAbility> app);
+private:
+  static bool isChinese(const std::string& str);
+  static bool isEnglish(const std::string& str);
 };

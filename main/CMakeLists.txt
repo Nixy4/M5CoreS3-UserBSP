@@ -6,6 +6,7 @@ set(src_dirs
 
 set(include_dirs    
   "./"
+  "./apps/"
   "./apps/launcher/"
   "./apps/faceRecognition/"
   )

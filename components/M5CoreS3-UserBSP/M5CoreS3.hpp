@@ -4,6 +4,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_log.h"
+#include "esp_err.h"
 #include "esp_camera.h"
 #include "bsp/esp-bsp.h"
 #include "SensorLTR553.hpp"
@@ -12,7 +13,6 @@
 class M5CoreS3
 {
 private:
-
 	M5CoreS3() {}
 	~M5CoreS3() {}
 public:
@@ -75,6 +75,6 @@ public:
 
 /*Utils*/
 
-void esp_free_heap_print();
+void esp_free_heap_print(const char* TAG);
 lv_obj_t* lv_scr_create_base();
 void uint16_swap(uint16_t* buf, size_t w, size_t h);
