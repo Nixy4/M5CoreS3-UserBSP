@@ -10,6 +10,7 @@ class Launcher : public UIAbility
 {
 private:
   lv_obj_t* _scr;
+  int appCount = 0;
 public:
   Launcher();
   ~Launcher();
