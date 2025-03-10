@@ -5,6 +5,6 @@ namespace mooncake
 {
   struct user_data
   {
-    int launcher;
+    int launcher_id;
   };
 }

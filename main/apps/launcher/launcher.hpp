@@ -20,9 +20,12 @@ public:
   void onHide() override;
   void onBackground() override;
   void onShow() override;
-  void appButtonCreate(int appId);
+  
   int appRegister(unique_ptr<AppAbility> app);
 private:
+  static inline int appButtonGetCol(int id);
+  static inline int appButtonGetRow(int id);
+  void appButtonCreate(int appId);
   static bool isChinese(const std::string& str);
   static bool isEnglish(const std::string& str);
 };

@@ -5,8 +5,11 @@
 #include "freertos/task.h"
 #include "esp_log.h"
 #include "esp_err.h"
+#include "esp_check.h"
 #include "esp_camera.h"
+#include "esp_lcd_touch.h"
 #include "bsp/esp-bsp.h"
+#include "esp_lcd_touch_ft5x06.h"
 #include "SensorLTR553.hpp"
 #include "lvgl.h"
 
@@ -28,6 +31,7 @@ public:
 	i2c_master_dev_handle_t _i2cDevHandleAXP2101 = NULL;
 	i2c_master_dev_handle_t _i2cDevHandleAW9523  = NULL;
  	lv_disp_t*              _display             = NULL;
+	// esp_lcd_touch_handle_t  _touch							 = NULL;
 	sensor_t*               _camera              = NULL;
 	SensorLTR553 _alSensor; // Ambient Light Sensor
 

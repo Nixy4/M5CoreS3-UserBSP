@@ -32,9 +32,11 @@ esp_err_t M5CoreS3::i2cInit()
   _i2cMasterBusHandle  = bsp_i2c_get_bus_handle();
   _i2cDevHandleAXP2101 = bsp_i2c_get_dev_handle_axp2101();
   _i2cDevHandleAW9523  = bsp_i2c_get_dev_handle_aw9523();
+  // _touch               = bsp_touch_get_handle();
   assert(_i2cMasterBusHandle != NULL);
   assert(_i2cDevHandleAXP2101 != NULL);
   assert(_i2cDevHandleAW9523 != NULL);
+  // assert(_touch != NULL);
   return err;
 }
 
@@ -95,58 +97,22 @@ void M5CoreS3::displayRotate(lv_disp_t* disp, lv_display_rotation_t rotation)
 
 lv_disp_t* M5CoreS3::displayInit() 
 { 
-  bsp_display_cfg_t cfg = {
-    .lvgl_port_cfg = {
+  const bsp_display_cfg_t cfg = {
+    .lvgl_port_cfg =     { 
       .task_priority     = 4,
       .task_stack        = 7168,
-      .task_affinity     = APP_CPU_NUM,
+      .task_affinity     = -1,
       .task_max_sleep_ms = 500,
       .timer_period_ms   = 5,
     },
-    .buffer_size   = 320*240,
-    .double_buffer = 0,
-    .flags         = {
-      .buff_dma    = true,
-      .buff_spiram = false,
-    }    
-  };
-  ESP_ERROR_CHECK(lvgl_port_init(&cfg.lvgl_port_cfg));
-  ESP_ERROR_CHECK(bsp_display_brightness_init());
-
-  esp_lcd_panel_io_handle_t io_handle = NULL;
-  esp_lcd_panel_handle_t panel_handle = NULL;
-  const bsp_display_config_t bsp_disp_cfg = {
-      .max_transfer_sz = BSP_LCD_DRAW_BUFF_SIZE * sizeof(uint16_t),
-  };
-  ESP_ERROR_CHECK(bsp_display_new(&bsp_disp_cfg, &panel_handle, &io_handle));
-
-  esp_lcd_panel_disp_on_off(panel_handle, true);
-
-  /* Add LCD screen */
-  ESP_LOGD(TAG, "Add LCD screen");
-  const lvgl_port_display_cfg_t disp_cfg = {
-    .io_handle     = io_handle,
-    .panel_handle  = panel_handle,
-    .buffer_size   = cfg.buffer_size,
-    .double_buffer = cfg.double_buffer,
-    .hres          = BSP_LCD_H_RES,
-    .vres          = BSP_LCD_V_RES,
-    .monochrome    = false,
-      /* Rotation values must be same as used in esp_lcd for initial settings of the screen */
-    .rotation = {
-      .swap_xy  = false,
-      .mirror_x = false,
-      .mirror_y = false,
-    },
+    .buffer_size = 320 * 240,
+    .double_buffer = false,
     .flags = {
-    .buff_dma            = cfg.flags.buff_dma,
-    .buff_spiram         = cfg.flags.buff_spiram,
-#if LVGL_VERSION_MAJOR >= 9
-    .swap_bytes          = (BSP_LCD_BIGENDIAN ? true : false),
-#endif
+      .buff_dma = true,
+      .buff_spiram = false
     }
   };
-  return lvgl_port_add_disp(&disp_cfg);
+  return bsp_display_start_with_config(&cfg);
 }
 
 esp_err_t M5CoreS3::cameraInit() 
@@ -236,10 +202,6 @@ lv_obj_t* lv_scr_create_base()
 {
   lv_obj_t* scr = lv_obj_create(NULL);
   lv_obj_set_size(scr, LV_HOR_RES, LV_VER_RES);
-  lv_obj_set_style_pad_top(scr, 10, 0);
-  lv_obj_set_style_pad_bottom(scr, 10, 0);
-  lv_obj_set_style_pad_left(scr, 10, 0);
-  lv_obj_set_style_pad_right(scr, 10, 0);
   return scr;
 }
 

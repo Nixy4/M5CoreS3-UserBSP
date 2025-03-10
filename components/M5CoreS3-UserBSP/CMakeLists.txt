@@ -6,8 +6,8 @@ set(include_dirs
   . 
   )
 
-set(requires        
-
+set(requirs        
+  m5stack_core_s3
   )
 
 idf_component_register(
