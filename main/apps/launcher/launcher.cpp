@@ -60,7 +60,6 @@ Launcher::Launcher()
   lv_obj_set_layout(_scr, LV_LAYOUT_GRID);
 #endif
   core.displayUnlock();//!
-  esp_free_heap_print(TAG "1");
 }
 
 Launcher::~Launcher()
@@ -90,7 +89,7 @@ void Launcher::onHide()
 
 void Launcher::onBackground()
 {
-  esp_free_heap_print(TAG "6");
+
 }
 
 void Launcher::onShow()
@@ -98,7 +97,6 @@ void Launcher::onShow()
   core.displayLock(0);//!
   lv_scr_load_anim(_scr, LV_SCR_LOAD_ANIM_FADE_IN, 300, 0, 0);
   core.displayUnlock();//!
-  esp_free_heap_print(TAG "2");
 }
 
 int Launcher::appButtonGetCol(int id)
@@ -165,9 +163,7 @@ void Launcher::appButtonCreate(int id) //TODO: 优化按钮布局
   lv_label_set_text(label, info.name.c_str());
   lv_obj_set_style_text_font(label, &lv_font_montserrat_16, 0);
   lv_obj_set_style_text_color(label, {0x00,0x00,0x00}, 0);
-  // lv_obj_align(label, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
-  // lv_obj_align_to(label, button, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
-    lv_obj_set_grid_cell(
+  lv_obj_set_grid_cell(
     label, 
     LV_GRID_ALIGN_CENTER, col, 1, 
     LV_GRID_ALIGN_CENTER, row*2+2, 1
@@ -176,21 +172,19 @@ void Launcher::appButtonCreate(int id) //TODO: 优化按钮布局
   //设置按钮回调
   lv_obj_add_event_cb(button,[](lv_event_t* e)
   {
+    Launcher* l = (Launcher*)e->user_data;
     ESP_LOGI(TAG, "button clicked");
-  },LV_EVENT_CLICKED,NULL);
+  },LV_EVENT_CLICKED, this);
 
   core.displayUnlock();//!
 }
 
 int Launcher::appRegister(unique_ptr<AppAbility> appAbility)
 {
-  esp_free_heap_print(TAG "3");
   int id = cake.installApp( move(appAbility) );
   if(id < 0) return id;
   appCount++;
-  esp_free_heap_print(TAG "4");
   appButtonCreate(id);
-  esp_free_heap_print(TAG" 5");
   ESP_LOGE(TAG, "appCount:%d", appCount);
   return id;
 }

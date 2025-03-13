@@ -2,12 +2,12 @@
 #include "M5CoreS3.hpp"
 #include "mooncake.h"
 #include "launcher.hpp"
-#include "faceRecognition.hpp"
+// #include "faceRecognition.hpp"
 
 using namespace std;
 using namespace mooncake;
 
-static const char* TAG = "fMAIN";
+static const char* TAG = "MAIN";
 static M5CoreS3& core = M5CoreS3::getInstance();
 static Mooncake& cake = GetMooncake();
 
