@@ -27,7 +27,10 @@ public:
 		setAppInfo().icon = (void*)&human_handsup;
 	}
 
-	~test() {}
+	~test() 
+	{
+
+	}
 
 	void onCreate() override
 	{
