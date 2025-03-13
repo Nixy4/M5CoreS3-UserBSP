@@ -3,8 +3,7 @@
 static M5CoreS3& core = M5CoreS3::getInstance();
 static Mooncake& cake = GetMooncake();
 
-FaceRecognition::FaceRecognition() : 
-  _recognizer(&_feat, "/spiffs/face.db")
+FaceRecognition::FaceRecognition() :  _recognizer(&_feat, "/spiffs/face.db")
 {
   ESP_LOGI(TAG, "FaceRecognition()");
 }

@@ -2,7 +2,7 @@
 #include "M5CoreS3.hpp"
 #include "mooncake.h"
 #include "launcher.hpp"
-// #include "faceRecognition.hpp"
+#include "faceRecognition.hpp"
 
 using namespace std;
 using namespace mooncake;
