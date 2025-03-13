@@ -31,9 +31,9 @@ public:
 	i2c_master_dev_handle_t _i2cDevHandleAXP2101 = NULL;
 	i2c_master_dev_handle_t _i2cDevHandleAW9523  = NULL;
  	lv_disp_t*              _display             = NULL;
-	// esp_lcd_touch_handle_t  _touch							 = NULL;
+	esp_lcd_touch_handle_t  _touch							 = NULL;
 	sensor_t*               _camera              = NULL;
-	SensorLTR553 _alSensor; // Ambient Light Sensor
+	SensorLTR553 					 	_alSensor; // Ambient Light Sensor
 
 	/*Audio*/
 	esp_err_t audioInit(const i2s_std_config_t* i2s_config);//*original
@@ -58,6 +58,7 @@ public:
 	esp_err_t displayBrightnessOn();//*original
 	esp_err_t displayBrightnessOff();//*original
 	esp_err_t displayBrightnessSet(uint8_t brightness);//*original
+	esp_err_t displayBrightnessAutoClose(uint32_t ms);//*original
 	esp_err_t displayLock(uint32_t ms);//*original
 	void displayUnlock();//*original
 	void displayRotate(lv_disp_t* disp, lv_display_rotation_t rotation);//*original
@@ -76,7 +77,6 @@ public:
 	int alSensorGetLight(int channel);
 	int alSensorGetProximity(bool* saturated);
 };
-
 /*Utils*/
 
 void esp_free_heap_print(const char* TAG);

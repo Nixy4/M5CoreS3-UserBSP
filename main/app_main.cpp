@@ -23,6 +23,8 @@ public:
 		ESP_LOGI(TAG, "test constructor");
 		id_self = count++;
 		setAppInfo().name = "test" + to_string(id_self);
+		LV_IMG_DECLARE(human_handsup);
+		setAppInfo().icon = (void*)&human_handsup;
 	}
 
 	~test() {}
@@ -74,6 +76,10 @@ extern "C" void app_main(void)
 	{
 		int launcher_id = cake.createExtension(make_unique<Launcher>());
 		Launcher* launcher_handle =	cake.getExtensionInstance<Launcher>( launcher_id );
+		launcher_handle->appRegister(make_unique<test>());
+		launcher_handle->appRegister(make_unique<test>());
+		launcher_handle->appRegister(make_unique<test>());
+		launcher_handle->appRegister(make_unique<test>());
 		launcher_handle->appRegister(make_unique<test>());
 		launcher_handle->appRegister(make_unique<test>());
 		launcher_handle->appRegister(make_unique<test>());

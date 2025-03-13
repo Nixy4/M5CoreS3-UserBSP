@@ -1,6 +1,7 @@
 #include "M5CoreS3.hpp"
-
+#include <memory>
 static const char* TAG = "M5CoreS3";
+static std::unique_ptr core;
 
 esp_err_t M5CoreS3::audioInit(const i2s_std_config_t* i2s_config) 
 { 
@@ -32,11 +33,11 @@ esp_err_t M5CoreS3::i2cInit()
   _i2cMasterBusHandle  = bsp_i2c_get_bus_handle();
   _i2cDevHandleAXP2101 = bsp_i2c_get_dev_handle_axp2101();
   _i2cDevHandleAW9523  = bsp_i2c_get_dev_handle_aw9523();
-  // _touch               = bsp_touch_get_handle();
+  _touch               = bsp_touch_get_handle();
   assert(_i2cMasterBusHandle != NULL);
   assert(_i2cDevHandleAXP2101 != NULL);
   assert(_i2cDevHandleAW9523 != NULL);
-  // assert(_touch != NULL);
+  assert(_touch != NULL);
   return err;
 }
 

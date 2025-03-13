@@ -2,6 +2,8 @@
 
 #define FLEX 0
 
+#define GRID_LIEN_CNT 4
+
 #define TAG "Launcher"
 static M5CoreS3& core = M5CoreS3::getInstance();
 static Mooncake& cake = GetMooncake();
@@ -9,16 +11,18 @@ static Mooncake& cake = GetMooncake();
 Launcher::Launcher()
 {
   static int32_t col_dsc[] = {
-    70, 
-    70, 
-    70, 
-    70,
+    70, // >> 80
+    70, // >> 160
+    70, // >> 240
+    70, // >> 320
     LV_GRID_TEMPLATE_LAST
   };
   static int32_t row_dsc[] = {
-    70, 
-    70, 
-    70, 
+    20, // >> 30
+    70, // >> 110
+    20, // >> 140
+    70, // >> 220
+    20, // >> 240
     LV_GRID_TEMPLATE_LAST
   }; 
   //如果是开机重启,则播放开机动画
@@ -99,33 +103,31 @@ void Launcher::onShow()
 
 int Launcher::appButtonGetCol(int id)
 {
-  return id % (4+1);
+  return id % GRID_LIEN_CNT;
 }
 
 int Launcher::appButtonGetRow(int id)
 {
-  return id / (3+1);
+  return id / GRID_LIEN_CNT;
 }
 
 void Launcher::appButtonCreate(int id) //TODO: 优化按钮布局
 {
   core.displayLock(0);//!
   lv_obj_t* button = lv_btn_create(_scr);
-
 #if FLEX //Flex布局
   lv_obj_set_flex_grow(button, 1);  
   lv_obj_set_size(button, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
 #else //Grid布局
   int col = appButtonGetCol(id);
   int row = appButtonGetRow(id);
+  ESP_LOGE(TAG, "id:%d, col:%d, row:%d",id , col, row);
   // ESP_LOGE(TAG, "id:%d, col:%d, row:%d",id , col, row);
   lv_obj_set_grid_cell(
     button, 
     LV_GRID_ALIGN_STRETCH, col, 1, 
-    LV_GRID_ALIGN_STRETCH, row, 1
+    LV_GRID_ALIGN_STRETCH, row*2+1, 1
   ); 
-  // lv_obj_set_style_grid_cell_x_align(button, LV_GRID_ALIGN_CENTER, 0);
-  // lv_obj_set_style_grid_cell_y_align(button, LV_GRID_ALIGN_CENTER, 0);
 #endif
 
   AppAbility::AppInfo_t info = cake.getAppInfo(id);
@@ -157,12 +159,20 @@ void Launcher::appButtonCreate(int id) //TODO: 优化按钮布局
     lv_img_set_src(img, info.icon);
     lv_obj_center(img);
   }
-  // //设置APP名称
-  // lv_obj_t* label = lv_label_create(button);
-  // lv_label_set_text(label, info.name.c_str());
-  // lv_obj_set_style_text_font(label, &lv_font_montserrat_12, 0);
-  // lv_obj_align_to(label, button, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
 
+  //设置APP名称
+  lv_obj_t* label = lv_label_create(_scr);
+  lv_label_set_text(label, info.name.c_str());
+  lv_obj_set_style_text_font(label, &lv_font_montserrat_16, 0);
+  lv_obj_set_style_text_color(label, {0x00,0x00,0x00}, 0);
+  // lv_obj_align(label, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
+  // lv_obj_align_to(label, button, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
+    lv_obj_set_grid_cell(
+    label, 
+    LV_GRID_ALIGN_CENTER, col, 1, 
+    LV_GRID_ALIGN_CENTER, row*2+2, 1
+  ); 
+  
   //设置按钮回调
   lv_obj_add_event_cb(button,[](lv_event_t* e)
   {
@@ -181,6 +191,7 @@ int Launcher::appRegister(unique_ptr<AppAbility> appAbility)
   esp_free_heap_print(TAG "4");
   appButtonCreate(id);
   esp_free_heap_print(TAG" 5");
+  ESP_LOGE(TAG, "appCount:%d", appCount);
   return id;
 }
 
