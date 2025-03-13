@@ -7,7 +7,7 @@
 using namespace std;
 using namespace mooncake;
 
-static const char* TAG = "MAIN";
+static const char* TAG = "fMAIN";
 static M5CoreS3& core = M5CoreS3::getInstance();
 static Mooncake& cake = GetMooncake();
 
