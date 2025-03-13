@@ -1,7 +1,6 @@
 #include "M5CoreS3.hpp"
 #include <memory>
 static const char* TAG = "M5CoreS3";
-static std::unique_ptr core;
 
 esp_err_t M5CoreS3::audioInit(const i2s_std_config_t* i2s_config) 
 { 
