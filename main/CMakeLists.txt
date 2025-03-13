@@ -2,7 +2,7 @@ set(src_dirs
   "./"
   "./lv_imgs/"
   "./apps/launcher/"
-  # "./apps/faceRecognition/"
+  "./apps/faceRecognition/"
   )
 
 set(include_dirs    
@@ -10,7 +10,7 @@ set(include_dirs
   "./lv_imgs/"
   "./apps/"
   "./apps/launcher/"
-  # "./apps/faceRecognition/"
+  "./apps/faceRecognition/"
   )
 
 set(requires        

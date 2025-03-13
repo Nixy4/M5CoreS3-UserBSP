@@ -15,4 +15,7 @@ dependencies:
   espressif/esp_lvgl_port:
     public: true
     version: ^2
+  espressif/human_face_recognition:
+    public: true
+    version: ^0.2.1
   
