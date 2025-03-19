@@ -99,6 +99,16 @@ void Launcher::onShow()
   core.displayUnlock();//!
 }
 
+void Launcher::setId(int id)
+{
+  _id = id;
+}
+
+int Launcher::getId()
+{
+  return _id;
+}
+
 int Launcher::appButtonGetCol(int id)
 {
   return id % GRID_LIEN_CNT;
@@ -172,9 +182,10 @@ void Launcher::appButtonCreate(int id) //TODO: 优化按钮布局
   //设置按钮回调
   lv_obj_add_event_cb(button,[](lv_event_t* e)
   {
-    Launcher* l = (Launcher*)e->user_data;
+    int id = (int)e->user_data;
+    cake.openApp(id);
     ESP_LOGI(TAG, "button clicked");
-  },LV_EVENT_CLICKED, this);
+  },LV_EVENT_CLICKED, (void*)id);
 
   core.displayUnlock();//!
 }
@@ -182,10 +193,10 @@ void Launcher::appButtonCreate(int id) //TODO: 优化按钮布局
 int Launcher::appRegister(unique_ptr<AppAbility> appAbility)
 {
   int id = cake.installApp( move(appAbility) );
-  if(id < 0) return id;
-  appCount++;
+  if(id < 0) return -1;
+  _appCount++;
   appButtonCreate(id);
-  ESP_LOGE(TAG, "appCount:%d", appCount);
+  ESP_LOGE(TAG, "_appCount:%d", _appCount);
   return id;
 }
 
